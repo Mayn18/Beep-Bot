@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en" data-theme="meadow" data-text="m">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Beep-Bot · your pocket companion</title>
+  <meta name="description" content="Beep-Bot is a cozy pixel-art chat companion that lives in a little game world.">
+  <meta name="theme-color" content="#8fd3ff" id="meta-theme-color">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+  <!-- Apply the saved theme before first paint so there is no flash of the wrong world. -->
+  <script>
+    try {
+      var t = localStorage.getItem('beepbot:theme');
+      if (t) document.documentElement.dataset.theme = t;
+      var s = JSON.parse(localStorage.getItem('beepbot:settings') || '{}');
+      if (s.textSize) document.documentElement.dataset.text = s.textSize;
+    } catch (e) {}
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <!-- Pixel world (canvas layers are created by js/scene/sceneManager.js) -->
+  <div id="scene" class="scene" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <div id="app" class="app">
+    <header class="topbar px" role="banner">
+      <button class="btn btn--icon topbar__menu" id="btn-journal" type="button"
+              aria-label="Open conversations" aria-controls="journal" aria-expanded="false">
+        <span data-icon="menu" data-size="3"></span>
+      </button>
+
+      <a class="brand" href="./" aria-label="Beep-Bot home">
+        <span class="brand__sprite" data-sprite="head" data-scale="2"></span>
+        <span class="brand__text">
+          <span class="brand__name">BEEP-BOT</span>
+          <span class="brand__sub">your pocket companion</span>
+        </span>
+      </a>
+
+      <div class="topbar__spacer"></div>
+
+      <button class="chip" id="btn-world" type="button" aria-haspopup="dialog">
+        <span class="chip__icon" id="world-icon"></span>
+        <span class="chip__label"><span class="chip__kicker">World</span><span class="chip__name" id="world-name">Daytime Meadow</span></span>
+        <span class="chip__caret" aria-hidden="true">▾</span>
+      </button>
+
+      <button class="btn btn--icon" id="btn-settings" type="button" aria-haspopup="dialog" aria-label="Open settings">
+        <span data-icon="gear" data-size="3"></span>
+      </button>
+    </header>
+
+    <div class="layout">
+      <aside class="journal px" id="journal" aria-label="Conversations">
+        <div class="journal__head">
+          <h2 class="journal__title">Journal</h2>
+          <button class="btn btn--icon btn--ghost journal__close" id="btn-journal-close" type="button" aria-label="Close conversations">
+            <span data-icon="close" data-size="2"></span>
+          </button>
+        </div>
+
+        <button class="btn btn--primary btn--block" id="btn-new" type="button">
+          <span data-icon="plus" data-size="2"></span><span>New chat</span>
+        </button>
+
+        <label class="search px px--xs">
+          <span class="search__icon" data-icon="search" data-size="2"></span>
+          <input id="chat-search" type="search" placeholder="Search chats" autocomplete="off" aria-label="Search conversations">
+        </label>
+
+        <nav class="journal__list" id="chat-list" aria-label="Saved conversations"></nav>
+
+        <footer class="journal__foot">
+          <span data-icon="heart" data-size="1"></span>
+          <span>Saved on this device</span>
+        </footer>
+      </aside>
+
+      <main class="stage">
+        <section class="chat px" id="chat" aria-label="Chat with Beep">
+          <span class="decor decor--chat" id="decor-chat" aria-hidden="true"></span>
+
+          <header class="chat__head">
+            <div class="chat__who">
+              <div class="portrait px px--s" data-sprite="head" data-scale="3" aria-hidden="true"></div>
+              <div class="chat__id">
+                <h1 class="chat__name">Beep</h1>
+                <p class="chat__status"><span class="dot" aria-hidden="true"></span><span id="chat-title">Online and ready</span></p>
+              </div>
+            </div>
+            <div class="hud" title="Beep levels up as you chat">
+              <span class="hud__lv" id="hud-lv">LV 1</span>
+              <div class="hud__bar" id="hud-xp" role="progressbar" aria-label="Experience to next level" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
+                <i></i><i></i><i></i><i></i><i></i>
+              </div>
+            </div>
+          </header>
+
+          <div class="chat__log" id="chat-log" role="log" aria-live="polite" aria-label="Conversation" tabindex="0">
+            <div class="chat__inner" id="chat-inner"></div>
+          </div>
+
+          <button class="jump btn btn--small" id="btn-jump" type="button" hidden>
+            <span data-icon="arrow-down" data-size="1"></span><span>New messages</span>
+          </button>
+
+          <form class="composer" id="composer" autocomplete="off">
+            <div class="composer__row">
+              <div class="composer__field px px--s">
+                <textarea id="composer-input" rows="1" maxlength="2000" placeholder="Say something to Beep…" aria-label="Message Beep"></textarea>
+              </div>
+              <button class="btn btn--primary btn--send" id="btn-send" type="submit" aria-label="Send message" disabled>
+                <span class="btn--send__label">Send</span>
+                <span data-icon="send" data-size="2"></span>
+              </button>
+            </div>
+            <p class="composer__hint"><kbd>Enter</kbd> to send · <kbd>Shift</kbd> + <kbd>Enter</kbd> for a new line</p>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <div class="drawer-scrim" id="drawer-scrim" hidden></div>
+  </div>
+
+  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="false"></div>
+  <div id="modal-root"></div>
+
+  <noscript><p style="position:fixed;inset:auto 0 50% 0;text-align:center;font-family:monospace">Beep-Bot needs JavaScript to run.</p></noscript>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

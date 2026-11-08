@@ -1,0 +1,189 @@
+/* ==========================================================================
+   Beep-Bot design tokens
+   One block per world. Every color in the UI comes from these variables, so
+   switching data-theme on <html> re-skins the whole app (and transitions).
+   ========================================================================== */
+
+:root {
+  --font-ui: 'Pixelify Sans', 'VT323', ui-monospace, Menlo, Consolas, monospace;
+  --font-px: 'Press Start 2P', 'Pixelify Sans', ui-monospace, monospace;
+
+  --px: 4px;              /* thickness of pixel borders; .px--s / .px--xs shrink it */
+  --msg-size: 18px;
+  --ease-pop: cubic-bezier(.2, .9, .3, 1.25);
+  --ease-soft: cubic-bezier(.3, .7, .2, 1);
+}
+
+:root[data-text='s'] { --msg-size: 16px; }
+:root[data-text='m'] { --msg-size: 18px; }
+:root[data-text='l'] { --msg-size: 21px; }
+
+@media (max-width: 640px) { :root { --px: 3px; } }
+
+/* --------------------------------------------------------------------------
+   Daytime Meadow: cream paper, clover green, bubblegum pink
+   -------------------------------------------------------------------------- */
+:root[data-theme='meadow'] {
+  color-scheme: light;
+  --bg-fallback: #a5defa;
+  --chrome: #8fd3ff;
+
+  --panel: #fffaf0;  --panel-2: #f4ecd6;  --panel-3: #ffeecf;
+  --border: #4d5c3b; --hi: #ffffff;       --lo: #ecdcb6;
+  --drop: rgba(48, 72, 40, .30);
+
+  --ink: #4b3d2e;    --ink-soft: #7d6b58; --ink-faint: #a99984;
+  --accent: #ff8fab; --accent-ink: #4a1f30;
+  --accent-2: #6fcf84; --accent-2-ink: #173a22;
+  --glow: #fff2a8;
+
+  --bot-bubble: #ffffff;  --bot-ink: #4b3d2e;
+  --user-bubble: #ffc8d8; --user-ink: #4a1f30;
+  --input-bg: #ffffff;
+  --scrim: rgba(60, 90, 50, .28);
+
+  --bot-k: #35506b; --bot-b: #9ad9ff; --bot-h: #e4f6ff;
+  --bot-d: #2b3a52; --bot-e: #b6ffcf; --bot-m: #b6ffcf; --bot-a: #ff8fab;
+
+  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' shape-rendering='crispEdges'%3E%3Cg fill='%23ffb3c6' fill-opacity='.55'%3E%3Crect x='8' y='6' width='4' height='4'/%3E%3Crect x='6' y='8' width='8' height='0'/%3E%3Crect x='6' y='8' width='2' height='0'/%3E%3C/g%3E%3Cg fill='%23ffe08a' fill-opacity='.7'%3E%3Crect x='34' y='30' width='4' height='4'/%3E%3C/g%3E%3Cg fill='%2388d79a' fill-opacity='.5'%3E%3Crect x='20' y='38' width='4' height='2'/%3E%3Crect x='42' y='10' width='2' height='4'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* --------------------------------------------------------------------------
+   Cozy Night: ink-blue paper, moon gold, lavender
+   -------------------------------------------------------------------------- */
+:root[data-theme='night'] {
+  color-scheme: dark;
+  --bg-fallback: #161a52;
+  --chrome: #1a1650;
+
+  --panel: #262152;  --panel-2: #1a1642;  --panel-3: #342d6e;
+  --border: #090720; --hi: #3e3784;       --lo: #17123a;
+  --drop: rgba(4, 2, 24, .55);
+
+  --ink: #f3ecff;    --ink-soft: #bfb2f0; --ink-faint: #8a7ec9;
+  --accent: #ffd36e; --accent-ink: #3a2400;
+  --accent-2: #a898ff; --accent-2-ink: #160f3d;
+  --glow: #ffd98a;
+
+  --bot-bubble: #342d6e;  --bot-ink: #f3ecff;
+  --user-bubble: #f6c46a; --user-ink: #3a2400;
+  --input-bg: #151238;
+  --scrim: rgba(4, 2, 24, .55);
+
+  --bot-k: #090720; --bot-b: #b8a8ff; --bot-h: #e8e0ff;
+  --bot-d: #110c30; --bot-e: #ffe08a; --bot-m: #ffe08a; --bot-a: #ffd36e;
+
+  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' shape-rendering='crispEdges'%3E%3Cg fill='%23ffffff' fill-opacity='.22'%3E%3Crect x='10' y='8' width='2' height='2'/%3E%3Crect x='40' y='22' width='2' height='2'/%3E%3Crect x='24' y='44' width='2' height='2'/%3E%3C/g%3E%3Cg fill='%23ffd98a' fill-opacity='.35'%3E%3Crect x='46' y='6' width='2' height='2'/%3E%3Crect x='6' y='34' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* --------------------------------------------------------------------------
+   Rainy Evening: foggy lavender paper, periwinkle, lamp amber
+   -------------------------------------------------------------------------- */
+:root[data-theme='rain'] {
+  color-scheme: light;
+  --bg-fallback: #5b6296;
+  --chrome: #4b5185;
+
+  --panel: #e2e5f7;  --panel-2: #cfd5ee;  --panel-3: #eef0fc;
+  --border: #30345e; --hi: #f8f9ff;       --lo: #b9c1e4;
+  --drop: rgba(22, 26, 64, .42);
+
+  --ink: #30355c;    --ink-soft: #5d6590; --ink-faint: #8c93bb;
+  --accent: #8e9bf2; --accent-ink: #12163b;
+  --accent-2: #ffbb70; --accent-2-ink: #3a2208;
+  --glow: #ffd9a0;
+
+  --bot-bubble: #f6f7ff;  --bot-ink: #30355c;
+  --user-bubble: #d6c4f4; --user-ink: #2a1f4d;
+  --input-bg: #f8f9ff;
+  --scrim: rgba(22, 26, 64, .38);
+
+  --bot-k: #30345e; --bot-b: #a9bbff; --bot-h: #e2e8ff;
+  --bot-d: #15183a; --bot-e: #ffd9a0; --bot-m: #ffd9a0; --bot-a: #ffbb70;
+
+  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' shape-rendering='crispEdges'%3E%3Cg fill='%237f8ce6' fill-opacity='.28'%3E%3Crect x='6' y='4' width='2' height='6'/%3E%3Crect x='28' y='20' width='2' height='6'/%3E%3Crect x='16' y='30' width='2' height='4'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* --------------------------------------------------------------------------
+   Sunset Dream: peach paper, coral, lilac
+   -------------------------------------------------------------------------- */
+:root[data-theme='sunset'] {
+  color-scheme: light;
+  --bg-fallback: #d95b8a;
+  --chrome: #ff8f6b;
+
+  --panel: #fff1e8;  --panel-2: #ffe2d2;  --panel-3: #ffd6c2;
+  --border: #6a2c58; --hi: #fffaf6;       --lo: #f6c9b6;
+  --drop: rgba(92, 28, 72, .36);
+
+  --ink: #5a2a46;    --ink-soft: #8c5071; --ink-faint: #b98aa2;
+  --accent: #ff6f80; --accent-ink: #3d0f27;
+  --accent-2: #b98bff; --accent-2-ink: #25104a;
+  --glow: #ffb36b;
+
+  --bot-bubble: #fff9f4;  --bot-ink: #5a2a46;
+  --user-bubble: #e5c9ff; --user-ink: #3a1d5c;
+  --input-bg: #fffaf6;
+  --scrim: rgba(80, 24, 66, .34);
+
+  --bot-k: #6a2c58; --bot-b: #ffb4a2; --bot-h: #ffe5da;
+  --bot-d: #3a1d4e; --bot-e: #ffe9a8; --bot-m: #ffe9a8; --bot-a: #ff6f80;
+
+  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' shape-rendering='crispEdges'%3E%3Cg fill='%23ff8f9c' fill-opacity='.3'%3E%3Crect x='6' y='10' width='6' height='2'/%3E%3Crect x='30' y='32' width='6' height='2'/%3E%3C/g%3E%3Cg fill='%23b98bff' fill-opacity='.28'%3E%3Crect x='32' y='8' width='4' height='2'/%3E%3Crect x='10' y='38' width='4' height='2'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* --------------------------------------------------------------------------
+   Enchanted Forest: mossy dark, mint glow, mushroom pink
+   -------------------------------------------------------------------------- */
+:root[data-theme='forest'] {
+  color-scheme: dark;
+  --bg-fallback: #0f3b34;
+  --chrome: #0d2f2c;
+
+  --panel: #173c35;  --panel-2: #102e29;  --panel-3: #22544a;
+  --border: #04120e; --hi: #2f6c5c;       --lo: #0b241f;
+  --drop: rgba(0, 10, 8, .55);
+
+  --ink: #e6ffec;    --ink-soft: #a6dcc0; --ink-faint: #6ea68d;
+  --accent: #8dfcc4; --accent-ink: #062f20;
+  --accent-2: #ff9fd6; --accent-2-ink: #3a0c2a;
+  --glow: #8dffd6;
+
+  --bot-bubble: #22544a;  --bot-ink: #e6ffec;
+  --user-bubble: #f6a8d8; --user-ink: #3a0c2a;
+  --input-bg: #0d2823;
+  --scrim: rgba(0, 12, 10, .5);
+
+  --bot-k: #04120e; --bot-b: #8bf0c5; --bot-h: #d6ffea;
+  --bot-d: #08201a; --bot-e: #fff3a0; --bot-m: #fff3a0; --bot-a: #ff9fd6;
+
+  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' shape-rendering='crispEdges'%3E%3Cg fill='%238dfcc4' fill-opacity='.2'%3E%3Crect x='12' y='10' width='2' height='2'/%3E%3Crect x='42' y='36' width='2' height='2'/%3E%3C/g%3E%3Cg fill='%23ff9fd6' fill-opacity='.22'%3E%3Crect x='34' y='8' width='2' height='2'/%3E%3Crect x='8' y='42' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* --------------------------------------------------------------------------
+   Snowy Cabin: snow paper, hearth red, frost blue
+   -------------------------------------------------------------------------- */
+:root[data-theme='snow'] {
+  color-scheme: light;
+  --bg-fallback: #5a6fa8;
+  --chrome: #6b7fb8;
+
+  --panel: #f5f8ff;  --panel-2: #e2eafa;  --panel-3: #ffffff;
+  --border: #2c3868; --hi: #ffffff;       --lo: #c6d4ee;
+  --drop: rgba(26, 36, 90, .34);
+
+  --ink: #2c3458;    --ink-soft: #5b6896; --ink-faint: #8f9ac2;
+  --accent: #ff8a80; --accent-ink: #3d1010;
+  --accent-2: #74bbff; --accent-2-ink: #0d2a4a;
+  --glow: #ffd27a;
+
+  --bot-bubble: #ffffff;  --bot-ink: #2c3458;
+  --user-bubble: #ffd9ae; --user-ink: #4a2a10;
+  --input-bg: #ffffff;
+  --scrim: rgba(26, 36, 90, .34);
+
+  --bot-k: #2c3868; --bot-b: #e4eeff; --bot-h: #ffffff;
+  --bot-d: #1b2347; --bot-e: #8fd0ff; --bot-m: #8fd0ff; --bot-a: #ff8a80;
+
+  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' shape-rendering='crispEdges'%3E%3Cg fill='%2374bbff' fill-opacity='.35'%3E%3Crect x='8' y='8' width='2' height='2'/%3E%3Crect x='28' y='24' width='2' height='2'/%3E%3C/g%3E%3Cg fill='%23ffffff'%3E%3Crect x='20' y='6' width='2' height='2'/%3E%3Crect x='4' y='30' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E");
+}

@@ -1,0 +1,101 @@
+/* ==========================================================================
+   Base: reset, typography, the world layer, and the pixel-border system
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { height: 100%; margin: 0; }
+
+body {
+  font-family: var(--font-ui);
+  font-size: 17px;
+  line-height: 1.35;
+  color: var(--ink);
+  background: var(--bg-fallback);
+  overflow: hidden;
+  transition: background-color .9s ease;
+}
+
+button, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: 0; padding: 0; }
+h1, h2, h3, p { margin: 0; }
+
+[hidden] { display: none !important; }
+
+::selection { background: var(--accent); color: var(--accent-ink); }
+
+:focus { outline: none; }
+:focus-visible {
+  outline: 3px dashed var(--accent-2);
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ---------- The world ---------- */
+
+.scene { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: var(--bg-fallback); }
+
+.scene__layer {
+  position: absolute; inset: 0;
+  opacity: 0;
+  transition: opacity 1.1s steps(8, end);   /* stepped fade = pixel-dissolve feel */
+}
+.scene__layer.is-in  { opacity: 1; }
+.scene__layer canvas {
+  position: absolute; left: 0; top: 0;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+}
+.scene__layer canvas { image-rendering: pixelated; }
+
+.vignette {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 40%, transparent 55%, rgba(0, 0, 0, .14) 100%);
+}
+
+/* ---------- Pixel border system ----------
+   Stepped-corner boxes made from box-shadows (no images, no clip-path), so
+   every color is a CSS variable and transitions smoothly between themes.
+   --px sets the thickness; .px--s and .px--xs shrink it. */
+
+.px {
+  background: var(--panel);
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--border),
+    0 var(--px) 0 0 var(--border),
+    calc(var(--px) * -1) 0 0 0 var(--border),
+    var(--px) 0 0 0 var(--border),
+    inset 0 var(--px) 0 0 var(--hi),
+    inset 0 calc(var(--px) * -1) 0 0 var(--lo),
+    0 calc(var(--px) * 2) 0 0 var(--drop);
+}
+.px--s  { --px: 3px; }
+.px--xs { --px: 2px; }
+
+/* Theme transitions: only while the .theming class is on <html>, so normal
+   hover/press feedback stays snappy. */
+.theming *, .theming *::before, .theming *::after {
+  transition-property: background-color, color, box-shadow, border-color, fill, opacity !important;
+  transition-duration: .9s !important;
+  transition-timing-function: ease !important;
+}
+
+/* ---------- Pixel scrollbars ---------- */
+* { scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  box-shadow: inset 0 0 0 3px var(--panel), inset 0 0 0 4px var(--border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001s !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+}
+.no-anim *, .no-anim *::before, .no-anim *::after { animation: none !important; }
